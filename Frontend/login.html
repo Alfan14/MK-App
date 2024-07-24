@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat datang di Magetan Kuliner</title>
+    <link rel="stylesheet" href="css/style-login.css">
+
+    <!-- font poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- gambar sate -->
+    <img class="sate" src="image/sate-kelinci.jpg" alt="sate-kelinci.jpg">
+    
+    <!-- login -->
+    <div class="main">
+        <div class="logo">
+            <img src="image/login-logo.png" alt="Magetan Kuliner">
+        </div>
+        <h1 class="headline">Piye kabare lur</h1>
+        <h1 class="subheadline">Login sek yo</h1>
+
+        <!-- form -->
+        <form action="action_page.php" method="post">
+        <label for="uname" class="uname">Email or Username</label>
+            <div class="uname-box">
+                <input type="text" placeholder="Enter Email or Username" name="uname" required>    
+            </div>
+        <label for="psw" class="psw">Password</label>
+            <div class="psw-box">
+                <input type="password" placeholder="Enter Password" name="psw" required>    
+        </div>
+        <div class="button">
+            <button type="submit">Login</button>
+        </div>
+        <div class="remember">
+            <label><input type="checkbox" checked="checked" name="remember">Remember me</label>    
+        </div>
+    </div>
+</body>
+</html>
