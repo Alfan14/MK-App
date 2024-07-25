@@ -1,4 +1,4 @@
-as .map {
-    height: 400px;
+.map {
+    height: 100vh;
     width: 100%;
-}
+  }
