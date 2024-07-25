@@ -1,0 +1,44 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", Helvetica, sans-serif;
+    display: flex;
+}
+
+.main {
+    display: inline;
+    margin: 1em;
+    padding: 1em;
+    font-size: 20pt;
+}
+
+.logo {
+    align-items: center;
+}
+
+img {
+    width: 50%;
+    height: auto;
+}
+
+.uname-box {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.psw-box {
+    margin-right: 10em;
+}
+
+.sate {
+    width: 100%;
+    height: 100%;
+}
