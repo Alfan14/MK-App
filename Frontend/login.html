@@ -17,28 +17,18 @@
     
     <!-- login -->
     <div class="main">
-        <div class="logo">
-            <img src="image/login-logo.png" alt="Magetan Kuliner">
-        </div>
+        <img src="image/login-logo.png" alt="Magetan Kuliner" class="logo">
         <h1 class="headline">Piye kabare lur</h1>
         <h1 class="subheadline">Login sek yo</h1>
 
         <!-- form -->
         <form action="action_page.php" method="post">
-        <label for="uname" class="uname">Email or Username</label>
-            <div class="uname-box">
-                <input type="text" placeholder="Enter Email or Username" name="uname" required>    
-            </div>
+        <label for="uname">Email or Username</label>
+        <input type="text" placeholder="Enter Email or Username" name="uname" required class="uname-box">    
         <label for="psw" class="psw">Password</label>
-            <div class="psw-box">
-                <input type="password" placeholder="Enter Password" name="psw" required>    
-        </div>
-        <div class="button">
-            <button type="submit">Login</button>
-        </div>
-        <div class="remember">
-            <label><input type="checkbox" checked="checked" name="remember">Remember me</label>    
-        </div>
+        <input type="password" placeholder="Enter Password" name="psw" required class="psw-box">
+        <button type="submit" class="button">Login</button>
+        <label><input type="checkbox" checked="checked" name="remember" class="remember">Remember me</label>    
     </div>
 </body>
 </html>
