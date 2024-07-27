@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Cards</title>
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            max-width: 300px;
+            margin: 20px auto;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .card h2 {
+            margin: 0 0 10px;
+        }
+        .card button {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .card button:disabled {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Restaurants in London</h1>
+    <div class="card" id="restaurantCard">
+        <h2 id="restaurantName">Restaurant Name</h2>
+        <p>ID: <span id="restaurantId">1</span></p>
+        <button id="prevButton">Previous</button>
+        <button id="nextButton">Next</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
