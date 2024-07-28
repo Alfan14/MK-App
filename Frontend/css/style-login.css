@@ -9,6 +9,12 @@ body {
     display: flex;
 }
 
+.sate {
+    position: relative;
+    width: 130%;
+    height: auto;
+}
+
 .main {
     display: inline-block;
     margin: 1em 4em;
@@ -29,7 +35,7 @@ body {
 }
 
 .subheadline {
-    margin: 0 0 1em 0;
+    margin: 0 0 0.7em 0;
     font-size: 30pt;
 }
 
@@ -37,29 +43,64 @@ label {
     font-size: 20pt;
 }
 
-.uname-box {
+.box {
     width: 100%;
-    padding: 12px 20px;
-    margin: 1em 0;
+    padding: 0.2em 1em;
+    margin: 0.5em 0;
     display: inline-block;
     border: 3px solid black;
     border-radius: 0.5em;
     box-sizing: border-box;
+    font-family: "Poppins";
+    font-size: 15pt;
 }
 
-.psw-box {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 1em 0;
-    display: inline-block;
+.login {
+    margin: 0.5em auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.button {
+    padding: 0.1em 0.5em;
+    margin: 0.5em 0;
+    background-color: #6e2d1f;
+    color: #ffffff;
     border: 3px solid black;
-    border-radius: 0.5em;
+    border-radius: 0.3em;
     box-sizing: border-box;
+    font-family: "Poppins";
+    font-size: 15pt;
 }
 
-.sate {
-    width: 130%;
-    height: auto;
+.ingat {
+    display: flex;
+    align-items: center;
+}
+
+.login input {
+    margin: 0 0.5em 0 1em;
+    width: 20px;
+    height: 20px;
+}
+
+.remember {
+    font-size: 15pt;
+}
+
+
+.signup {
+    display: block;
+    margin: 1em auto;
+    font-size: 15pt;
+}
+
+.git {
+    display: block;
+    margin: 1em auto;
+    text-decoration: none;
+    color: #000000;
 }
 
 @media (max-width: 600px) {
