@@ -37,9 +37,19 @@ function displayRestaurant(index) {
     const restaurant = restaurants[index];
     const restaurantId = restaurant.id || 'No ID';
     const restaurantName = restaurant.tags.name || 'Unnamed Restaurant';
+    const restaurantPhone = restaurant.tags.phone || 'N/A';
+    const restaurantLat = restaurant.lat || 0;
+    const restaurantLon = restaurant.lon || 0;
+    const restaurantLink = `https://www.openstreetmap.org/?mlat=${restaurantLat}&mlon=${restaurantLon}&zoom=16`;
+
+    // Simulate a rating if not available
+    const restaurantRating = restaurant.tags.rating || (Math.random() * 5).toFixed(1);
 
     document.getElementById('restaurantId').textContent = restaurantId;
     document.getElementById('restaurantName').textContent = restaurantName;
+    document.getElementById('restaurantPhone').textContent = restaurantPhone;
+    document.getElementById('restaurantRating').textContent = restaurantRating;
+    document.getElementById('restaurantLink').href = restaurantLink;
 
     document.getElementById('prevButton').disabled = index === 0;
     document.getElementById('nextButton').disabled = index === restaurants.length - 1;
