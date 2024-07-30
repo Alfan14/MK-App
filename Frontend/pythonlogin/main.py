@@ -31,7 +31,7 @@ def login():
             session['id'] = account['id']
             session['username'] = account['username']
             msg = 'Logged in successfully !'
-            return render_template('layout.html', msg = msg)
+            return render_template('main.html', msg = msg)
         else:
             msg = 'Incorrect username / password !'
     return render_template('index.html', msg = msg)
@@ -75,7 +75,7 @@ def register():
 @app.route('/pythonlogin/home')
 def home():
     if 'loggedin' in session:
-        return render_template('home.html', username=session['username'])
+        return render_template('main.html', username=session['username'])
     return redirect(url_for('login'))
 
 @app.route('/pythonlogin/profile')
