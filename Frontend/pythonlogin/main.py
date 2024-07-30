@@ -19,30 +19,22 @@ mysql = MySQL(app)
 
 @app.route('/pythonlogin/', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username'].strip()
-        password = request.form['password'].strip()
-
-        cur = mysql.connection.cursor()
-        cur.execute('SELECT * FROM accounts WHERE username = %s', (username,))
-        user = cur.fetchone()
-        cur.close()
-
-        if user:
-            print('Retrieved user:', user)
-            print('Hashed password from DB:', user[2])
-            print('Provided password:', password)
-
-            if check_password_hash(user[2], password):
-                session['user_id'] = user[0]  # Adjust if necessary
-                flash('Login successful!')
-                return redirect(url_for('dashboard'))
-            else:
-                flash('Invalid username or password.')
+    msg = ''
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+        username = request.form['username']
+        password = request.form['password']
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM accounts WHERE username = % s AND password = % s', (username, password, ))
+        account = cursor.fetchone()
+        if account:
+            session['loggedin'] = True
+            session['id'] = account['id']
+            session['username'] = account['username']
+            msg = 'Logged in successfully !'
+            return render_template('layout.html', msg = msg)
         else:
-            flash('Invalid username or password.')
-
-    return render_template('index.html')
+            msg = 'Incorrect username / password !'
+    return render_template('index.html', msg = msg)
 
 @app.route('/pythonlogin/logout')
 def logout():
@@ -73,15 +65,12 @@ def register():
             elif not username or not password or not email:
                 msg = 'Please fill out the form!'
             else:
-                hash = password + app.secret_key
-                hash = hashlib.sha1(hash.encode())
-                password = hash.hexdigest()
-                cursor.execute('INSERT INTO accounts VALUES (NULL, %s, %s, %s)', (username, password, email,))
-                mysql.connection.commit()
-                msg = 'You have successfully registered!'
-        else:
-            msg = 'Please fill out the form!'
-    return render_template('register.html', msg=msg)
+                cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s)', (username, password, email, ))
+            mysql.connection.commit()
+            msg = 'You have successfully registered !'
+    elif request.method == 'POST':
+        msg = 'Please fill out the form !'
+    return render_template('register.html', msg = msg)
 
 @app.route('/pythonlogin/home')
 def home():
