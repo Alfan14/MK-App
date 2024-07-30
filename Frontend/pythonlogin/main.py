@@ -1,11 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session ,  flash
 from flask_mysqldb import MySQL
 import MySQLdb.cursors, re, hashlib
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
 # Change this to your secret key (it can be anything, it's for extra protection)
-app.secret_key = 'Your_Secret_Key'
+app.secret_key = 'septiyan_h4rd_l1f3'
 
 # Enter your database connection details below
 app.config['MYSQL_HOST'] = '127.0.0.1'
@@ -18,21 +19,30 @@ mysql = MySQL(app)
 
 @app.route('/pythonlogin/', methods=['GET', 'POST'])
 def login():
-    msg = ''
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
-        username = request.form['username']
-        password = request.form['password']
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = %s AND password = %s', (username, password,))
-        account = cursor.fetchone()
-        if account:
-            session['loggedin'] = True
-            session['id'] = account['id']
-            session['username'] = account['username']
-            return redirect(url_for('home'))
+    if request.method == 'POST':
+        username = request.form['username'].strip()
+        password = request.form['password'].strip()
+
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT * FROM accounts WHERE username = %s', (username,))
+        user = cur.fetchone()
+        cur.close()
+
+        if user:
+            print('Retrieved user:', user)
+            print('Hashed password from DB:', user[2])
+            print('Provided password:', password)
+
+            if check_password_hash(user[2], password):
+                session['user_id'] = user[0]  # Adjust if necessary
+                flash('Login successful!')
+                return redirect(url_for('dashboard'))
+            else:
+                flash('Invalid username or password.')
         else:
-            msg = 'Incorrect username/password!'
-    return render_template('index.html', msg=msg)
+            flash('Invalid username or password.')
+
+    return render_template('index.html')
 
 @app.route('/pythonlogin/logout')
 def logout():
