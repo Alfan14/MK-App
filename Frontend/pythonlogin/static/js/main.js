@@ -75,10 +75,9 @@ function renderPage(page) {
         card.innerHTML = `
             <img src="${restaurantImage}" alt="${restaurantName}" />
             <h2>${restaurantName}</h2>
-            <p>ID: ${restaurantId}</p>
             <p>Telephone: ${restaurantPhone}</p>
             <p>Rating: ${restaurantRating}</p>
-            <p>Location: <a href="${restaurantLink}" target="_blank"> ${restaurantName}</a></p>
+           <p><a href="${restaurantLink}" target="_blank"><i class="fas fa-map-marker-alt"></i> ${restaurantName}</a></p>
         `;
         container.appendChild(card);
     }
