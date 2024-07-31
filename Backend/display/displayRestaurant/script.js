@@ -10,7 +10,8 @@ area[name="London"]->.london;
 out center;
 `;
 
-let currentRestaurantIndex = 0;
+let currentPage = 0;
+const itemsPerPage = 12;
 let restaurants = [];
 
 async function fetchRestaurantData() {
@@ -25,47 +26,57 @@ async function fetchRestaurantData() {
 
         const data = await response.json();
         restaurants = data.elements;
-        displayRestaurant(currentRestaurantIndex);
+        renderPage(currentPage);
     } catch (error) {
         console.error('Error fetching restaurant data:', error);
     }
 }
 
-function displayRestaurant(index) {
-    if (restaurants.length === 0) return;
+function renderPage(page) {
+    const startIndex = page * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, restaurants.length);
+    const container = document.getElementById('cardContainer');
+    container.innerHTML = '';
 
-    const restaurant = restaurants[index];
-    const restaurantId = restaurant.id || 'No ID';
-    const restaurantName = restaurant.tags.name || 'Unnamed Restaurant';
-    const restaurantPhone = restaurant.tags.phone || 'N/A';
-    const restaurantLat = restaurant.lat || 0;
-    const restaurantLon = restaurant.lon || 0;
-    const restaurantLink = `https://www.openstreetmap.org/?mlat=${restaurantLat}&mlon=${restaurantLon}&zoom=16`;
+    for (let i = startIndex; i < endIndex; i++) {
+        const restaurant = restaurants[i];
+        const restaurantId = restaurant.id || 'No ID';
+        const restaurantName = restaurant.tags.name || 'Unnamed Restaurant';
+        const restaurantPhone = restaurant.tags.phone || 'N/A';
+        const restaurantLat = restaurant.lat || 0;
+        const restaurantLon = restaurant.lon || 0;
+        const restaurantLink = `https://www.openstreetmap.org/?mlat=${restaurantLat}&mlon=${restaurantLon}&zoom=16`;
+        const restaurantRating = restaurant.tags.rating || (Math.random() * 5).toFixed(1);
+        const restaurantImage = `https://via.placeholder.com/300?text=${encodeURIComponent(restaurantName)}`;
 
-    // Simulate a rating if not available
-    const restaurantRating = restaurant.tags.rating || (Math.random() * 5).toFixed(1);
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <img src="${restaurantImage}" alt="${restaurantName}" />
+             <h2>${restaurantName}</h2>
+            <p>ID: ${restaurantId}</p>
+            <p>Telephone: ${restaurantPhone}</p>
+            <p>Rating: ${restaurantRating}</p>
+            <p>Location: <a href="${restaurantLink}" target="_blank">View ${restaurantName} on Map</a></p>
+        `;
+        container.appendChild(card);
+    }
 
-    document.getElementById('restaurantId').textContent = restaurantId;
-    document.getElementById('restaurantName').textContent = restaurantName;
-    document.getElementById('restaurantPhone').textContent = restaurantPhone;
-    document.getElementById('restaurantRating').textContent = restaurantRating;
-    document.getElementById('restaurantLink').href = restaurantLink;
-
-    document.getElementById('prevButton').disabled = index === 0;
-    document.getElementById('nextButton').disabled = index === restaurants.length - 1;
+    document.getElementById('prevPageButton').disabled = page === 0;
+    document.getElementById('nextPageButton').disabled = endIndex === restaurants.length;
 }
 
-document.getElementById('prevButton').addEventListener('click', () => {
-    if (currentRestaurantIndex > 0) {
-        currentRestaurantIndex--;
-        displayRestaurant(currentRestaurantIndex);
+document.getElementById('prevPageButton').addEventListener('click', () => {
+    if (currentPage > 0) {
+        currentPage--;
+        renderPage(currentPage);
     }
 });
 
-document.getElementById('nextButton').addEventListener('click', () => {
-    if (currentRestaurantIndex < restaurants.length - 1) {
-        currentRestaurantIndex++;
-        displayRestaurant(currentRestaurantIndex);
+document.getElementById('nextPageButton').addEventListener('click', () => {
+    if ((currentPage + 1) * itemsPerPage < restaurants.length) {
+        currentPage++;
+        renderPage(currentPage);
     }
 });
 

@@ -1,24 +1,86 @@
-.card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 16px;
-    max-width: 300px;
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 960px;
     margin: 20px auto;
+}
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    border-radius: 8px;
+    margin: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: center;
 }
+
 .card h2 {
-    margin: 0 0 10px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #d3b18b;
+    padding-bottom: 5px;
 }
-.card button {
-    margin: 5px;
-    padding: 10px 20px;
-    background-color: #007BFF;
-    color: white;
+
+.card .price, .card .location {
+    margin: 0;
+    padding: 5px 0;
+} 
+
+.card a {
+    display: block;
+    width: 100%;
+    border-radius: 8px; /* Membuat sudut melengkung untuk link yang mengelilingi gambar */
+    overflow: hidden; /* Mengatasi elemen meluap */
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    margin: 10px 0;
+}
+
+.card p {
+    margin: 5px 0;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.pagination button {
+    background-color: #d3b18b;
+    color: #333;
     border: none;
+    padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
 }
-.card button:disabled {
-    background-color: #ccc;
+
+.pagination button:hover {
+    background-color: #b08968;
+}
+
+.pagination button:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+}
+
+.pagination #pageNumber {
+    color: #d3b18b;
+    font-weight: bold;
 }

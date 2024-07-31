@@ -18,72 +18,87 @@ document.addEventListener('click', function(event) {
     }
 });
 
-const cards = [
-    { title: "Sate Kelinci", price: "Rp. 20.000", location: "Telaga Sarangan", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Bakso Pak Sutarlan", price: "Rp. 5.000", location: "Desa Pencol", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Nasi Pecel Bu Tuti", price: "Rp. 15.000", location: "Pasar Baru", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Mie Ayam Bang Ali", price: "Rp. 12.000", location: "Jalan Raya", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Tahu Campur Mamat", price: "Rp. 10.000", location: "Gang Mawar", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Es Dawet Bu Yani", price: "Rp. 8.000", location: "Jalan Cendana", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Gado-Gado Bang Udin", price: "Rp. 13.000", location: "Pasar Lama", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Soto Ayam Pak Sastro", price: "Rp. 18.000", location: "Jalan Merdeka", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Ayam Bakar Mbok Jamu", price: "Rp. 25.000", location: "Jalan Anggrek", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Sate Kelinci", price: "Rp. 20.000", location: "Telaga Sarangan", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Bakso Pak Sutarlan", price: "Rp. 5.000", location: "Desa Pencol", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Nasi Pecel Bu Tuti", price: "Rp. 15.000", location: "Pasar Baru", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Mie Ayam Bang Ali", price: "Rp. 12.000", location: "Jalan Raya", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Tahu Campur Mamat", price: "Rp. 10.000", location: "Gang Mawar", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Es Dawet Bu Yani", price: "Rp. 8.000", location: "Jalan Cendana", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Gado-Gado Bang Udin", price: "Rp. 13.000", location: "Pasar Lama", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Soto Ayam Pak Sastro", price: "Rp. 18.000", location: "Jalan Merdeka", image: "https://via.placeholder.com/150", link: "#" },
-    { title: "Ayam Bakar Mbok Jamu", price: "Rp. 25.000", location: "Jalan Anggrek", image: "https://via.placeholder.com/150", link: "#" }
-];
+//Cards 
+const overpassUrl = 'https://overpass-api.de/api/interpreter';
+const overpassQuery = `
+[out:json];
+area[name="Magetan"]->.magetan;
+(
+  node["amenity"="restaurant"](area.magetan);
+  way["amenity"="restaurant"](area.magetan);
+  relation["amenity"="restaurant"](area.magetan);
+);
+out center;
+`;
 
-const cardsPerPage = 10;
-let currentPage = 1;
+let currentPage = 0;
+const itemsPerPage = 12;
+let restaurants = [];
 
-function renderCards() {
-    const cardContainer = document.getElementById('card-container');
-    cardContainer.innerHTML = '';
+async function fetchRestaurantData() {
+    try {
+        const response = await fetch(overpassUrl, {
+            method: 'POST',
+            body: overpassQuery,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
 
-    const start = (currentPage - 1) * cardsPerPage;
-    const end = start + cardsPerPage;
-    const paginatedCards = cards.slice(start, end);
+        const data = await response.json();
+        restaurants = data.elements;
+        renderPage(currentPage);
+    } catch (error) {
+        console.error('Error fetching restaurant data:', error);
+    }
+}
 
-    paginatedCards.forEach(card => {
-        const cardElement = document.createElement('div');
-        cardElement.className = 'card';
-        cardElement.innerHTML = `
-            <a href="${card.link}">
-                <img src="${card.image}" alt="${card.title}">
-            </a>
-            <div class="title">${card.title}</div>
-            <div class="price">${card.price}</div>
-            <div class="location">${card.location}</div>
+function renderPage(page) {
+    const startIndex = page * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, restaurants.length);
+    const container = document.getElementById('cardContainer');
+    container.innerHTML = '';
+
+    for (let i = startIndex; i < endIndex; i++) {
+        const restaurant = restaurants[i];
+        const restaurantId = restaurant.id || 'No ID';
+        const restaurantName = restaurant.tags.name || 'Unnamed Restaurant';
+        const restaurantPhone = restaurant.tags.phone || 'N/A';
+        const restaurantLat = restaurant.lat || 0;
+        const restaurantLon = restaurant.lon || 0;
+        const restaurantLink = `https://www.openstreetmap.org/?mlat=${restaurantLat}&mlon=${restaurantLon}&zoom=16`;
+        const restaurantRating = restaurant.tags.rating || (Math.random() * 5).toFixed(1);
+        const restaurantImage = `https://picsum.photos/300/200?random=${i}`;
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <img src="${restaurantImage}" alt="${restaurantName}" />
+            <h2>${restaurantName}</h2>
+            <p>ID: ${restaurantId}</p>
+            <p>Telephone: ${restaurantPhone}</p>
+            <p>Rating: ${restaurantRating}</p>
+            <p>Location: <a href="${restaurantLink}" target="_blank"> ${restaurantName}</a></p>
         `;
-        cardContainer.appendChild(cardElement);
-    });
-
-    document.getElementById('pageNumber').textContent = `Page ${currentPage}`;
-
-    document.getElementById('prevPage').disabled = currentPage === 1;
-    document.getElementById('nextPage').disabled = currentPage === Math.ceil(cards.length / cardsPerPage);
-}
-
-function nextPage() {
-    if (currentPage < Math.ceil(cards.length / cardsPerPage)) {
-        currentPage++;
-        renderCards();
+        container.appendChild(card);
     }
+
+    document.getElementById('prevPageButton').disabled = page === 0;
+    document.getElementById('nextPageButton').disabled = endIndex === restaurants.length;
 }
 
-function prevPage() {
-    if (currentPage > 1) {
+document.getElementById('prevPageButton').addEventListener('click', () => {
+    if (currentPage > 0) {
         currentPage--;
-        renderCards();
+        renderPage(currentPage);
     }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    renderCards();
 });
+
+document.getElementById('nextPageButton').addEventListener('click', () => {
+    if ((currentPage + 1) * itemsPerPage < restaurants.length) {
+        currentPage++;
+        renderPage(currentPage);
+    }
+});
+
+fetchRestaurantData();
