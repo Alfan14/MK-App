@@ -86,6 +86,6 @@ def profile():
         account = cursor.fetchone()
         return render_template('profile.html', account=account)
     return redirect(url_for('login'))
-
+#SearchEngine
 if __name__ == '__main__':
     app.run(debug=True)

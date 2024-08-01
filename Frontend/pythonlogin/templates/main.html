@@ -15,11 +15,11 @@
     <header>
         <div class="logo">Kuliner Magetan</div>
         <div class="search-bar">
-            <input type="text" placeholder="Cari Makanan atau Minuman...">
+            <input type="text" placeholder="Cari Makanan atau Minuman..."  id="searchInput">
         </div>
         <div class="menu">
             <button id="menuButton">Menu</button>
-            <button href="{{ url_for('logout') }}"id="logoutButton">Log Out</button>
+            <button id="logoutButton"><a class="linkButton" href="{{ url_for('logout') }}">Log Out</a></button>
         </div>
     </header>
     <div id="sidebar" class="sidebar">

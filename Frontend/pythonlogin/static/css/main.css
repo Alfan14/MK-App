@@ -71,6 +71,11 @@ header {
 .menu button#logoutButton:hover {
     background-color: rgba(0, 0, 0, 0.2);
 }
+.linkButton{
+    display: block;
+    text-decoration: none;
+    color:#d3b18b;
+}
 
 .sidebar {
     display: none;

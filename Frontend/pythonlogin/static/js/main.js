@@ -34,7 +34,9 @@ out center;
 let currentPage = 0;
 const itemsPerPage = 12;
 let restaurants = [];
+let currentRestaurants = [];
 
+// Fetch restaurant data from the server
 async function fetchRestaurantData() {
     try {
         const response = await fetch(overpassUrl, {
@@ -47,21 +49,22 @@ async function fetchRestaurantData() {
 
         const data = await response.json();
         restaurants = data.elements;
+        currentRestaurants = restaurants; // Initialize currentRestaurants
         renderPage(currentPage);
     } catch (error) {
         console.error('Error fetching restaurant data:', error);
     }
 }
 
+// Render the restaurant data for the current page
 function renderPage(page) {
     const startIndex = page * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, restaurants.length);
+    const endIndex = Math.min(startIndex + itemsPerPage, currentRestaurants.length);
     const container = document.getElementById('cardContainer');
     container.innerHTML = '';
 
     for (let i = startIndex; i < endIndex; i++) {
-        const restaurant = restaurants[i];
-        const restaurantId = restaurant.id || 'No ID';
+        const restaurant = currentRestaurants[i];
         const restaurantName = restaurant.tags.name || 'Unnamed Restaurant';
         const restaurantPhone = restaurant.tags.phone || 'N/A';
         const restaurantLat = restaurant.lat || 0;
@@ -77,15 +80,16 @@ function renderPage(page) {
             <h2>${restaurantName}</h2>
             <p>Telephone: ${restaurantPhone}</p>
             <p>Rating: ${restaurantRating}</p>
-           <p><a href="${restaurantLink}" target="_blank"><i class="fas fa-map-marker-alt"></i> ${restaurantName}</a></p>
+            <p><a href="${restaurantLink}" target="_blank"><i class="fas fa-map-marker-alt"></i> ${restaurantName}</a></p>
         `;
         container.appendChild(card);
     }
 
     document.getElementById('prevPageButton').disabled = page === 0;
-    document.getElementById('nextPageButton').disabled = endIndex === restaurants.length;
+    document.getElementById('nextPageButton').disabled = endIndex === currentRestaurants.length;
 }
 
+// Event listeners for pagination buttons
 document.getElementById('prevPageButton').addEventListener('click', () => {
     if (currentPage > 0) {
         currentPage--;
@@ -94,10 +98,26 @@ document.getElementById('prevPageButton').addEventListener('click', () => {
 });
 
 document.getElementById('nextPageButton').addEventListener('click', () => {
-    if ((currentPage + 1) * itemsPerPage < restaurants.length) {
+    if ((currentPage + 1) * itemsPerPage < currentRestaurants.length) {
         currentPage++;
         renderPage(currentPage);
     }
 });
 
+// Search restaurants based on input
+function searchRestaurants() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    currentRestaurants = restaurants.filter(restaurant =>
+        (restaurant.tags.name || '').toLowerCase().includes(query) ||
+        (restaurant.tags.phone || '').toLowerCase().includes(query)
+    );
+    currentPage = 0;
+    renderPage(currentPage);
+}
+
+// Set up event listener for the search input
+document.getElementById('searchInput').addEventListener('input', searchRestaurants);
+
+// Fetch and render data initially
 fetchRestaurantData();
+

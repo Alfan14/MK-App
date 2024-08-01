@@ -1,1 +1,0 @@
-const  userRoutes = require("./routes/user"); 
