@@ -87,3 +87,27 @@ function prevPage() {
 document.addEventListener('DOMContentLoaded', () => {
     renderCards();
 });
+
+function showPopup(card) {
+    const popup = document.getElementById('popup');
+    document.getElementById('popup-image').src = card.image;
+    document.getElementById('popup-title').textContent = card.title;
+    document.getElementById('popup-price').textContent = card.price;
+    document.getElementById('popup-location').textContent = card.location;
+    document.getElementById('popup-hours').textContent = `Buka: ${card.hours}`;
+    document.getElementById('popup-map').src = card.map;
+    document.getElementById('popup-route-button').href = card.link;
+    popup.style.display = 'flex';
+
+    const closeButton = document.querySelector('.close-button');
+    closeButton.addEventListener('click', () => {
+        popup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === popup) {
+            popup.style.display = 'none';
+        }
+    });
+}
+
