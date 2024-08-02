@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> 
+</head>
+<body>
+    {% block content %}
+    <h2>Home Page</h2>
+    <p>Welcome back, {{ username }}!</p>
+    <header>
+        <div class="logo">Kuliner Magetan</div>
+        <div class="search-bar">
+            <input type="text" placeholder="Cari Makanan atau Minuman..."  id="searchInput">
+        </div>
+        <div class="menu">
+            <button id="menuButton">Menu</button>
+            <button id="logoutButton"><a class="linkButton" href="{{ url_for('logout') }}">Log Out</a></button>
+        </div>
+    </header>
+    <div id="sidebar" class="sidebar">
+        <h2>Sidebar</h2>
+        <ul>
+            <a href="{{ url_for('profile') }}"><i class="fas fa-user-circle"></i>Profile</a>
+            <li><a href="#">Link 2</a></li>
+            <li><a href="#">Link 3</a></li>
+        </ul>
+        <p>Additional information</p>
+    </div>
+    <main>
+        <h1 class="main-title">Rekomendasi minggu ini</h1>
+        <p class="subtitle">Lagi viral banget!</p>
+       <div class="cards" id="cardContainer"></div>
+    <div class="pagination">
+        <button id="prevPageButton">Previous Page</button>
+        <button id="nextPageButton">Next Page</button>
+    </div>
+    </main>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% endblock %}
+</body>
+</html>
