@@ -39,8 +39,21 @@
         <button id="prevPageButton">Previous Page</button>
         <button id="nextPageButton">Next Page</button>
     </div>
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close-button">&times;</span>
+            <img id="popup-image" src="" alt="">
+            <div id="popup-title" class="popup-title"></div>
+            <div id="popup-price" class="popup-price"></div>
+            <div id="popup-location" class="popup-location"></div>
+            <div id="popup-hours" class="popup-hours"></div>
+            <img id="popup-map" src="" alt="Map">
+            <button id="popup-route-button" class="route-button">Cari rute terdekat</button>
+        </div>
     </main>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% endblock %}
 </body>
 </html>
+
+
