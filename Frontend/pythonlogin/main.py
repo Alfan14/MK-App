@@ -3,6 +3,7 @@ from flask_mysqldb import MySQL
 from wtforms import StringField, PasswordField, SubmitField, DateField, SelectField , HiddenField
 import MySQLdb.cursors, re, hashlib
 from flask_login import  LoginManager,UserMixin,login_required,current_user,login_manager
+from urllib.parse import urlparse, urljoin
 from wtforms.validators import DataRequired, Email
 from flask_wtf import FlaskForm
 
@@ -21,30 +22,6 @@ app.config['MYSQL_DB'] = 'python_login'
 # Initialize MySQL
 mysql = MySQL(app)
 
-
-# Initialize the LoginManager
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'editaccount'
-
-# User model definition
-class User(UserMixin):
-    def __init__(self, id, username, password):
-        self.id = id
-        self.username = username
-        self.password = password
-
-# User loader function
-@login_manager.user_loader
-def load_user(user_id):
-    cursor = mysql.connect().cursor()
-    cursor.execute('SELECT id, username, password FROM accounts WHERE id = %s', (user_id,))
-    user_data = cursor.fetchone()
-    cursor.close()
-    if user_data:
-        return User(*user_data)
-    return None
-
 @app.route('/pythonlogin/', methods=['GET', 'POST'])
 def login():
     msg = ''
@@ -52,17 +29,20 @@ def login():
         username = request.form['username']
         password = request.form['password']
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = % s AND password = % s', (username, password, ))
+        cursor.execute('SELECT * FROM accounts WHERE username = %s AND password = %s', (username, password,))
         account = cursor.fetchone()
+        print(account)  # Debugging: Check the account details
         if account:
             session['loggedin'] = True
             session['id'] = account['id']
             session['username'] = account['username']
-            msg = 'Logged in successfully !'
-            return render_template('main.html', msg = msg)
+            msg = 'Logged in successfully!'
+            return render_template('main.html', account=account, msg=msg)
         else:
-            msg = 'Incorrect username / password !'
-    return render_template('index.html', msg = msg)
+            msg = 'Incorrect username / password!'
+    
+    return render_template('index.html', msg=msg)
+
 
 @app.route('/pythonlogin/logout')
 def logout():
@@ -105,7 +85,10 @@ def register():
 @app.route('/pythonlogin/home')
 def home():
     if 'loggedin' in session:
-        return render_template('main.html', username=session['username'])
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM accounts WHERE id = %s', (session['id'],))
+        account = cursor.fetchone()
+        return render_template('main.html', username=session['username'],account=account)
     return redirect(url_for('login'))
 
 @app.route('/pythonlogin/profile')
@@ -116,48 +99,30 @@ def profile():
         account = cursor.fetchone()
         return render_template('profile.html', account=account)
     return redirect(url_for('login'))
+@app.route('/pythonlogin/edit-profile/<int:user_id>', methods=['GET', 'POST'])
+def edit_profile(user_id):
+    if 'loggedin' in session and session['id'] == user_id:
+        if request.method == 'POST':
+            username = request.form['username']
+            email = request.form['email']
+            cur = mysql.connection.cursor()
+            cur.execute("""
+                UPDATE accounts
+                SET username = %s, email = %s
+                WHERE id = %s
+            """, (username, email, user_id))
+            mysql.connection.commit()
+            cur.close()
+            flash('Profile updated successfully!')
+            return redirect(url_for('login'))
 
-class EditAccountForm(FlaskForm):
-    username = HiddenField('Username', validators=[DataRequired()])
-    email = StringField('Email', validators=[Email()])
-    submit = SubmitField('Submit')
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM accounts WHERE id = %s", (user_id,))
+        account = cur.fetchone()
+        cur.close()
+        return render_template('edit.html', account=account)
+    return redirect(url_for('login'))
 
-@app.route('/pythonlogin/editaccount', methods=['GET', 'POST'])
-@login_required
-def editaccount():
-    form = EditAccountForm()
-
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            username = current_user.username
-            email = form.email.data
-
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            try:
-                cursor.execute('UPDATE accounts SET email = %s WHERE username = %s', (email, username))
-                mysql.connection.commit()
-                flash('Profile updated successfully!', 'success')
-            except MySQLdb.Error as e:
-                flash(f'An error occurred: {e}', 'danger')
-            finally:
-                cursor.close()
-            
-            return redirect('/editaccount')
-    else:
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        try:
-            cursor.execute('SELECT * FROM accounts WHERE username = %s', (current_user.username,))
-            account = cursor.fetchone()
-            if account:
-                form.username.data = account['username']
-                form.email.data = account['email']
-        except MySQLdb.Error as e:
-            flash(f'An error occurred: {e}', 'danger')
-        finally:
-            cursor.close()
-
-        return render_template('edit.html', title='Edit Account', form=form)
-    return redirect(url_for('edit'))
 #SearchEngine
 if __name__ == '__main__':
     app.run(debug=True)
