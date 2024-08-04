@@ -1,0 +1,23 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #1b1b1b;
+    display: flex;
+    font-family: "Poppins", Arial, Helvetica, sans-serif;
+}
+
+.sidebar {
+    display: inline;
+    height: 100vh;
+    width: 50vh;
+    background-color: burlywood;
+}
+
+#wtf {
+    margin: 1em auto;
+    padding: 1em;
+}
