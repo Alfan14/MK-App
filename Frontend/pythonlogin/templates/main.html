@@ -9,9 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> 
 </head>
 <body>
-    {% block content %}
     <h2>Home Page</h2>
-    <p>Welcome back, {{ username }}!</p>
     <header>
         <div class="logo">Kuliner Magetan</div>
         <div class="search-bar">
@@ -25,22 +23,37 @@
     <div id="sidebar" class="sidebar">
         <h2>Sidebar</h2>
         <ul>
-            <a href="{{ url_for('profile') }}"><i class="fas fa-user-circle"></i>Profile</a>
-            <li><a href="#">Link 2</a></li>
-            <li><a href="#">Link 3</a></li>
+           <li><a href="{{ url_for('profile') }}"><i class="fas fa-user-circle"></i>Profile</a></li>
+            <li><a href="{{ url_for('edit_profile', user_id=account.id) }}"><i class="fas fa-edit"></i>Edit Profile</a></li>
+
+
+            <li><a href="#">Link 4</a></li>
         </ul>
-        <p>Additional information</p>
     </div>
     <main>
         <h1 class="main-title">Rekomendasi minggu ini</h1>
         <p class="subtitle">Lagi viral banget!</p>
-       <div class="cards" id="cardContainer"></div>
+    <div class="cards" id="cardContainer"></div>
     <div class="pagination">
         <button id="prevPageButton">Previous Page</button>
         <button id="nextPageButton">Next Page</button>
     </div>
+         <!--<div class="popup-content">
+            <span class="close-button">&times;</span>
+           
+            <img id="popup-image" src="" alt="">
+            <div id="popup-title" class="popup-title"></div>
+            <div id="popup-price" class="popup-price"></div>
+            <div id="popup-location" class="popup-location"></div>
+            <div id="popup-hours" class="popup-hours"></div>
+            <img id="popup-map" src="" alt="Map">
+           
+            <button id="popup-route-button" class="route-button">Cari rute terdekat</button>
+        </div>
+         -->
     </main>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    {% endblock %}
 </body>
 </html>
+
+
