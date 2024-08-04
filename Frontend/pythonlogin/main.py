@@ -34,10 +34,14 @@ def login():
         print(account)  # Debugging: Check the account details
         if account:
             session['loggedin'] = True
-            session['id'] = account['id']
-            session['username'] = account['username']
+            session['id'] = account[0]
+            session['username'] = account[1]
+            session['role'] = account[3]
             msg = 'Logged in successfully!'
-            return render_template('main.html', account=account, msg=msg)
+            if session['role'] == 'admin':
+                return redirect(url_for('admin'))
+            else :
+                return render_template('main.html', account=account, msg=msg)
         else:
             msg = 'Incorrect username / password!'
     
@@ -61,7 +65,7 @@ def register():
             password = request.form['password']
             email = request.form['email']
             
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor = mysql.bconnection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM accounts WHERE username = %s', (username,))
             account = cursor.fetchone()
             
@@ -90,6 +94,21 @@ def home():
         account = cursor.fetchone()
         return render_template('main.html', username=session['username'],account=account)
     return redirect(url_for('login'))
+
+@app.route('/pythonlogin/admin', methods=['GET', 'POST'])
+def admin():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        flash('Admin action performed', 'success')
+
+    # Example query to fetch data from the database
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM accounts")
+    accounts = cur.fetchall()
+    cur.close()
+
+    return render_template('admin.html', accounts=accounts)
 
 @app.route('/pythonlogin/profile')
 def profile():

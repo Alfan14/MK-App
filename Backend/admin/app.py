@@ -1,13 +1,19 @@
 from flask import Flask
 from flask_admin import Admin
-from flask_sqlalchemy import SQLAlchemy
 from flask_admin.contrib.sqla import ModelView
-
+import MySQLdb.cursors, re, hashlib
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'a1lf4n-s3cr3t-k3y'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-db = SQLAlchemy(app)
+app.secret_key = 'septiyan_h4rd_l1f3'
+
+# Enter your database connection details below
+app.config['MYSQL_HOST'] = '127.0.0.1'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'python_login'
+db = MySQL(app)
+
 admin = Admin(app, name='My Admin Panel', template_mode='bootstrap4')
 
 def get_models():
