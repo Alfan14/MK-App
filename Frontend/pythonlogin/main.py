@@ -11,7 +11,7 @@ import re
 import pymysql
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads/' 
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 # Change this to your secret key (it can be anything, it's for extra protection)
 app.secret_key = 'septiyan_h4rd_l1f3'
@@ -92,8 +92,9 @@ def register():
 
             # Save image to the upload directory
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
+            print(f"Saving file to: {file_path}")
             image.save(file_path)
-            
+
             if account:
                 msg = 'Account already exists!'
             elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
@@ -132,8 +133,11 @@ def profile():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM accounts WHERE id = %s', (session['id'],))
         account = cursor.fetchone()
-        return render_template('profile.html', account=account)
+        image_path = account['image'].replace('static/', '').replace('\\', '/')
+        return render_template('profile.html', account=account,image_path=image_path)
     return redirect(url_for('login'))
+
+
 @app.route('/pythonlogin/edit-profile/<int:user_id>', methods=['GET', 'POST'])
 def edit_profile(user_id):
     if 'loggedin' in session and session['id'] == user_id:
