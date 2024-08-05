@@ -6,8 +6,12 @@ from flask_login import  LoginManager,UserMixin,login_required,current_user,logi
 from urllib.parse import urlparse, urljoin
 from wtforms.validators import DataRequired, Email
 from flask_wtf import FlaskForm
+import os
+import re
+import pymysql
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'uploads/' 
 
 # Change this to your secret key (it can be anything, it's for extra protection)
 app.secret_key = 'septiyan_h4rd_l1f3'
@@ -74,13 +78,21 @@ def register():
     if request.method == 'POST':
         if 'username' in request.form and 'password' in request.form and 'email' in request.form:
             username = request.form['username']
+            image = request.files['image']
             password = request.form['password']
             email = request.form['email']
             role = request.form.get('role') 
-            
+
+            connection = mysql.connection
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM accounts WHERE username = %s', (username,))
             account = cursor.fetchone()
+            if not os.path.exists(app.config['UPLOAD_FOLDER']):
+                os.makedirs(app.config['UPLOAD_FOLDER'])
+
+            # Save image to the upload directory
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
+            image.save(file_path)
             
             if account:
                 msg = 'Account already exists!'
@@ -91,8 +103,13 @@ def register():
             elif not username or not password or not email:
                 msg = 'Please fill out the form!'
             else:
-                cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s,%s)', (username, password, email, role))
-            mysql.connection.commit()
+               with connection.cursor() as cursor:
+                sql = """
+                INSERT INTO accounts (username, image, password, email, role)
+                VALUES (%s, %s, %s, %s, %s)
+                """
+                cursor.execute(sql, (username, file_path, password, email, role))
+            connection.commit()
             msg = 'You have successfully registered !'
     elif request.method == 'POST':
         msg = 'Please fill out the form !'
