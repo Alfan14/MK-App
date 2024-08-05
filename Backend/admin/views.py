@@ -11,6 +11,7 @@ class AdminModelView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.role.name == 'Admin'
 
+
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 

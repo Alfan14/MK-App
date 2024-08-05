@@ -21,7 +21,14 @@ app.config['MYSQL_DB'] = 'python_login'
 
 # Initialize MySQL
 mysql = MySQL(app)
-
+@app.route('/pythonlogin/admin', methods=['GET', 'POST'])
+def admin():
+    if 'loggedin' in session and session['role'] == 'admin':
+        # Logic for the admin page
+        return render_template('admin.html', username=session['username'])
+    else:
+        flash('Access denied: Admins only!', 'danger')
+        return redirect(url_for('login'))
 @app.route('/pythonlogin/', methods=['GET', 'POST'])
 def login():
     msg = ''
@@ -29,18 +36,27 @@ def login():
         username = request.form['username']
         password = request.form['password']
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = %s AND password = %s', (username, password,))
+        cursor.execute('SELECT * FROM accounts WHERE username = %s', (username,))
         account = cursor.fetchone()
-        print(account)  # Debugging: Check the account details
+        cursor.close()
+        
         if account:
-            session['loggedin'] = True
-            session['id'] = account['id']
-            session['username'] = account['username']
-            msg = 'Logged in successfully!'
-            return render_template('main.html', account=account, msg=msg)
+            # Check hashed password
+            if (account['password'], password):
+                session['loggedin'] = True
+                session['id'] = account['id']
+                session['username'] = account['username']
+                session['role'] = account['role']
+                msg = 'Logged in successfully!'
+                if session['role'] == 'admin':
+                    return redirect(url_for('admin'))
+                else:
+                    return render_template('main.html', account=account, msg=msg)
+            else:
+                msg = 'Incorrect password!'
         else:
-            msg = 'Incorrect username / password!'
-    
+            msg = 'Username not found!'
+
     return render_template('index.html', msg=msg)
 
 
@@ -60,6 +76,7 @@ def register():
             username = request.form['username']
             password = request.form['password']
             email = request.form['email']
+            role = request.form.get('role') 
             
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM accounts WHERE username = %s', (username,))
@@ -74,13 +91,12 @@ def register():
             elif not username or not password or not email:
                 msg = 'Please fill out the form!'
             else:
-                cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s)', (username, password, email, ))
+                cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s,%s)', (username, password, email, role))
             mysql.connection.commit()
             msg = 'You have successfully registered !'
     elif request.method == 'POST':
         msg = 'Please fill out the form !'
     return render_template('register.html', msg = msg)
-
 
 @app.route('/pythonlogin/home')
 def home():
@@ -90,6 +106,8 @@ def home():
         account = cursor.fetchone()
         return render_template('main.html', username=session['username'],account=account)
     return redirect(url_for('login'))
+
+
 
 @app.route('/pythonlogin/profile')
 def profile():
