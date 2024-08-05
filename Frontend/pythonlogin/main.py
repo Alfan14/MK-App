@@ -98,7 +98,6 @@ def register():
         msg = 'Please fill out the form !'
     return render_template('register.html', msg = msg)
 
-
 @app.route('/pythonlogin/home')
 def home():
     if 'loggedin' in session:

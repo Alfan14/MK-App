@@ -57,6 +57,11 @@ async function fetchRestaurantData() {
 }
 
 // Render the restaurant data for the current page
+// Ensure these variables are defined at the appropriate scope
+const modal = document.getElementById('modal');
+const modalDetails = document.getElementById('modalDetails');
+const modalClose = document.querySelector('.modal-close');
+
 function renderPage(page) {
     const startIndex = page * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, currentRestaurants.length);
@@ -75,6 +80,7 @@ function renderPage(page) {
 
         const card = document.createElement('div');
         card.className = 'card';
+        card.style.cursor = 'pointer';
         card.innerHTML = `
             <img src="${restaurantImage}" alt="${restaurantName}" />
             <h2>${restaurantName}</h2>
@@ -82,39 +88,47 @@ function renderPage(page) {
             <p>Rating: ${restaurantRating}</p>
             <p><a href="${restaurantLink}" target="_blank"><i class="fas fa-map-marker-alt"></i> ${restaurantName}</a></p>
         `;
+        // Add click event to open modal with specific details
+        card.addEventListener('click', () => {
+            modalDetails.innerHTML = `
+                <img src="${restaurantImage}" alt="${restaurantName}" style="width: 100%;" />
+                <h2>${restaurantName}</h2>
+                <p>Telephone: ${restaurantPhone}</p>
+                <p>Rating: ${restaurantRating}</p>
+                <button id="popup-route-button" class="route-button"><a href="${restaurantLink}" target="_blank"><i class="fas fa-map-marker-alt"></i> Cari rute terdekat</a></button>
+            `;
+            modal.style.display = 'block';
+        });
+
         container.appendChild(card);
- /*
+    }
+
     container.style.display = 'flex';
 
-    const closeButton = document.querySelector('.close-button');
-    closeButton.addEventListener('click', () => {
-        container.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-        if (event.target === container) {
-            container.style.display = 'none';
-        }
-    });
-    */
+    // Ensure modalClose is defined
+    if (modalClose) {
+        modalClose.onclick = function() {
+            modal.style.display = 'none';
+        };
     }
-    
 
-    document.getElementById('prevPageButton').disabled = page === 0;
-    document.getElementById('nextPageButton').disabled = endIndex === currentRestaurants.length;
+    // Close modal when clicking outside of the modal content
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    const prevButton = document.getElementById('prevPageButton');
+    const nextButton = document.getElementById('nextPageButton');
+    
+    if (prevButton) {
+        prevButton.disabled = page === 0;
+    }
+    if (nextButton) {
+        nextButton.disabled = endIndex === currentRestaurants.length;
+    }
 }
-/*function showPopup(card) {
-   const popup = document.getElementById('cardContainer');
-    document.getElementById('popup-image').src = card.image;
-    document.getElementById('popup-title').textContent = card.title;
-    document.getElementById('popup-price').textContent = card.price;
-    document.getElementById('popup-location').textContent = card.location;
-    document.getElementById('popup-hours').textContent = `Buka: ${card.hours}`;
-    document.getElementById('popup-map').src = card.map;
-    document.getElementById('popup-route-button').href = card.link;
-    popup.style.display = 'flex';
-*/
-//}
 
 // Event listeners for pagination buttons
 document.getElementById('prevPageButton').addEventListener('click', () => {
