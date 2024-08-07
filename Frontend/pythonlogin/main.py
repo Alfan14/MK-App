@@ -8,7 +8,6 @@ from wtforms.validators import DataRequired, Email
 from flask_wtf import FlaskForm
 import os
 import re
-import pymysql
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
@@ -29,7 +28,7 @@ mysql = MySQL(app)
 def admin():
     if 'loggedin' in session and session['role'] == 'admin':
         # Logic for the admin page
-        return render_template('admin.html', username=session['username'])
+        return render_template('admin/admin.html', username=session['username'])
     else:
         flash('Access denied: Admins only!', 'danger')
         return redirect(url_for('login'))
@@ -90,7 +89,6 @@ def register():
             if not os.path.exists(app.config['UPLOAD_FOLDER']):
                 os.makedirs(app.config['UPLOAD_FOLDER'])
 
-            # Save image to the upload directory
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
             print(f"Saving file to: {file_path}")
             image.save(file_path)
