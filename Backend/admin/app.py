@@ -7,8 +7,6 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
-# set optional bootswatch theme
-app.config['FLASK_ADMIN_SWATCH'] = 'darkly'
 
 # Change this to your secret key (it can be anything, it's for extra protection)
 app.secret_key = 'septiyan_h4rd_l1f3'

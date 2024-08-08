@@ -32,9 +32,9 @@ def admin():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     # Retrieve all items with their views and likes
         cursor.execute("SELECT * FROM accounts")
-        user = cursor.fetchall()
+        accounts = cursor.fetchall()
         cursor.close()
-        return render_template('admin/admin.html', username=session['username'],user=user)
+        return render_template('admin/admin.html', username=session['username'],accounts=accounts)
     else:
         flash('Access denied: Admins only!', 'danger')
         return redirect(url_for('login'))
