@@ -1,10 +1,14 @@
-from flask import Flask
-from flask_admin import Admin
+from flask import Flask,render_template
+from flask_admin import Admin,BaseView, expose
 from flask_admin.contrib.sqla import ModelView
-import MySQLdb.cursors, re, hashlib
 from flask_mysqldb import MySQL
 
+# Flask and Flask-SQLAlchemy initialization here
+
 app = Flask(__name__)
+
+
+# Change this to your secret key (it can be anything, it's for extra protection)
 app.secret_key = 'septiyan_h4rd_l1f3'
 
 # Enter your database connection details below
@@ -12,22 +16,28 @@ app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'python_login'
+
+
+# Initialize MySQL
 db = MySQL(app)
 
-admin = Admin(app, name='My Admin Panel', template_mode='bootstrap4')
+admin = Admin(app, name='microblog', template_mode='bootstrap3')
+'''
+admin = Admin(app, name='microblog', template_mode='bootstrap3')
+admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(Post, db.session))
+'''
 
-def get_models():
-    from models import User, Role, Post
-    from views import UserAdmin, RoleAdmin, PostAdmin
+class AnalyticsView(BaseView):
+    @expose('/admin')
+    def index(self):
+        return self.render('analytics_index.html')
+admin.add_view(AnalyticsView(name='Analytics', endpoint='analytics'))
 
-    admin.add_view(UserAdmin(User, db.session))
-    admin.add_view(RoleAdmin(Role, db.session))
-    admin.add_view(PostAdmin(Post, db.session))
+@app.route('/home')
+def home():
+    arg1 = 'Fuck you'
+    return render_template('index.html',arg1=arg1)
 
-if __name__ == '__main__':
-    with app.app_context():
-        from models import User  # Import here to avoid circular import
-        db.create_all()
-        admin.add_view(ModelView(User, db.session))
+app.run()
 
-    app.run(debug=True)

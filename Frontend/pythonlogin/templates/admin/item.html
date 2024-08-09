@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ item.title }}</title>
+</head>
+<body>
+    <h1>{{ item.title }}</h1>
+    <p>Views: {{ item.views }}</p>
+    <p>Likes: {{ item.likes }}</p>
+
+    <form action="{{ url_for('like_item', item_id=item.id) }}" method="post">
+        <button type="submit">Like</button>
+    </form>
+</body>
+</html>

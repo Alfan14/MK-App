@@ -28,6 +28,13 @@
             <img src="{{ url_for('static', filename='image/dana.png') }}"  alt="dana.png" id="dana">
             <img src="{{ url_for('static', filename='image/gopay.png') }}"  alt="gopay.png" id="gopay">
         </div>
-    
 </div>
+<h1>{{ user.username }}'s Profile</h1>
+        <p>Email: {{ user.email }}</p>
+        <p>Views: {{ user.views }}</p>
+        <p>Likes: {{ user.likes }}</p>
+        <form method="post">
+            <button type="submit" name="like">Like</button>
+        </form>
+        <p>{{ msg }}</p>
 {% endblock %}

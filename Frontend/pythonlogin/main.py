@@ -24,14 +24,21 @@ app.config['MYSQL_DB'] = 'python_login'
 
 # Initialize MySQL
 mysql = MySQL(app)
+
+
 @app.route('/pythonlogin/admin', methods=['GET', 'POST'])
 def admin():
     if 'loggedin' in session and session['role'] == 'admin':
-        # Logic for the admin page
-        return render_template('admin/admin.html', username=session['username'])
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    # Retrieve all items with their views and likes
+        cursor.execute("SELECT * FROM accounts")
+        accounts = cursor.fetchall()
+        cursor.close()
+        return render_template('admin/admin.html', username=session['username'],accounts=accounts)
     else:
         flash('Access denied: Admins only!', 'danger')
         return redirect(url_for('login'))
+#Items
 @app.route('/pythonlogin/', methods=['GET', 'POST'])
 def login():
     msg = ''
@@ -42,7 +49,7 @@ def login():
         cursor.execute('SELECT * FROM accounts WHERE username = %s', (username,))
         account = cursor.fetchone()
         cursor.close()
-        
+
         if account:
             # Check hashed password
             if (account['password'], password):
@@ -61,8 +68,6 @@ def login():
             msg = 'Username not found!'
 
     return render_template('index.html', msg=msg)
-
-
 @app.route('/pythonlogin/logout')
 def logout():
     session.pop('loggedin', None)
@@ -115,24 +120,44 @@ def register():
     return render_template('register.html', msg = msg)
 
 @app.route('/pythonlogin/home')
-def home():
+def home(item_id):
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM accounts WHERE id = %s', (session['id'],))
         account = cursor.fetchone()
+
         return render_template('main.html', username=session['username'],account=account)
     return redirect(url_for('login'))
 
 
 
-@app.route('/pythonlogin/profile')
-def profile():
+@app.route('/pythonlogin/profile/<int:user_id>')
+def profile(user_id):
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM accounts WHERE id = %s', (session['id'],))
         account = cursor.fetchone()
+        msg = ''
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+        # Increment view count whenever a profile is accessed
+        cursor.execute("UPDATE accounts SET views = views + 1 WHERE id = %s", (user_id,))
+        mysql.connection.commit()
+
+        # Retrieve user details
+        cursor.execute("SELECT * FROM accounts WHERE id = %s", (user_id,))
+        user = cursor.fetchone()
+
+        if request.method == 'POST' and 'like' in request.form:
+            # Increment like count when the "like" button is clicked
+            cursor.execute("UPDATE accounts SET likes = likes + 1 WHERE id = %s", (user_id,))
+            mysql.connection.commit()
+            msg = 'Profile liked!'
+
+        cursor.close()
+
         image_path = account['image'].replace('static/', '').replace('\\', '/')
-        return render_template('profile.html', account=account,image_path=image_path)
+        return render_template('profile.html', account=account,image_path=image_path,msg=msg,user=user)
     return redirect(url_for('login'))
 
 
