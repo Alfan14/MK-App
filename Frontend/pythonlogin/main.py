@@ -30,14 +30,30 @@ mysql = MySQL(app)
 def admin():
     if 'loggedin' in session and session['role'] == 'admin':
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    # Retrieve all items with their views and likes
-        cursor.execute("SELECT * FROM accounts")
-        accounts = cursor.fetchall()
-        cursor.close()
-        return render_template('admin/admin.html', username=session['username'],accounts=accounts)
+        try:
+            # Retrieve all items with their views and likes
+            cursor.execute("SELECT * FROM accounts")
+            accounts = cursor.fetchall()
+
+            # Get the count of IDs
+            cursor.execute("SELECT COUNT(id) AS user_count FROM accounts")
+            counts = cursor.fetchone()
+            users = counts['user_count'] if counts else 0
+
+        except MySQLdb.Error as e:
+            # Log or handle the error
+            print(f"Database error: {e}")
+            users = 0
+            accounts = []
+
+        finally:
+            cursor.close()
+
+        return render_template('admin/admin.html', username=session['username'], accounts=accounts, users=users)
     else:
         flash('Access denied: Admins only!', 'danger')
         return redirect(url_for('login'))
+
 #Items
 @app.route('/pythonlogin/', methods=['GET', 'POST'])
 def login():

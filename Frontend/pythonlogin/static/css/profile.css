@@ -121,3 +121,14 @@ a {
 #edit-page {
     margin-top: 100vh;
 }
+
+/* laptop */
+@media (max-width: 600px) {
+    html {
+        font-size: 55%;
+    }
+
+    sidebar{
+        margin: 100vh 50vh;
+    }
+}
