@@ -131,22 +131,17 @@ def home(item_id):
 
 
 
-@app.route('/pythonlogin/profile/<int:user_id>')
+@app.route('/pythonlogin/profile/<int:user_id>', methods=['GET', 'POST'])
 def profile(user_id):
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM accounts WHERE id = %s', (session['id'],))
         account = cursor.fetchone()
         msg = ''
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
         # Increment view count whenever a profile is accessed
         cursor.execute("UPDATE accounts SET views = views + 1 WHERE id = %s", (user_id,))
         mysql.connection.commit()
-
-        # Retrieve user details
-        cursor.execute("SELECT * FROM accounts WHERE id = %s", (user_id,))
-        user = cursor.fetchone()
 
         if request.method == 'POST' and 'like' in request.form:
             # Increment like count when the "like" button is clicked
@@ -157,7 +152,7 @@ def profile(user_id):
         cursor.close()
 
         image_path = account['image'].replace('static/', '').replace('\\', '/')
-        return render_template('profile.html', account=account,image_path=image_path,msg=msg,user=user)
+        return render_template('profile.html', account=account,image_path=image_path,msg=msg)
     return redirect(url_for('login'))
 
 

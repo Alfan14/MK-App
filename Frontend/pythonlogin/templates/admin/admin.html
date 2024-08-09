@@ -11,13 +11,11 @@
         <h1>Admin Page</h1>
     <table>
         <tr>
-            <th>Username</th>
             <th>Views</th>
             <th>Likes</th>
         </tr>
         {% for account in accounts %}
         <tr>
-             <td>{{ account.username }}</td>
             <td>{{ account.views }}</td>
             <td>{{ account.likes }}</td>
         </tr>
