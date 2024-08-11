@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Page</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Welcome to the Admin Page, {{ username }}!</h1>
+        <p>This page is accessible only by admins.</p>
+        <h1>Admin Page</h1>
+    <table>
+        <tr>
+            <th>Views</th>
+            <th>Likes</th>
+        </tr>
+        {% for account in accounts %}
+        <tr>
+            <td>{{ account.views }}</td>
+            <td>{{ account.likes }}</td>
+        </tr>
+        {% endfor %}
+        <p>Total Users:{{ users }}</p>
+    </table>
+        <ul>
+            <li><a href="#">Manage Users</a></li>
+            <li><a href="#">View Reports</a></li>
+            <li><a href="#">Settings</a></li>
+        </ul>
+    </div>
+    <h2>Accounts</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+        </tr>
+        {% for account in accounts %}
+        <tr>
+            <td>{{ account[0] }}</td>
+            <td>{{ account[1] }}</td>
+            <td>{{ account[2] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
