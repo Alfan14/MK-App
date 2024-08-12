@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session ,  flash
+from flask import Flask, render_template, request, redirect, url_for, session ,  flash ,jsonify
 from flask_mysqldb import MySQL
 from wtforms import StringField, PasswordField, SubmitField, DateField, SelectField , HiddenField
 import MySQLdb.cursors, re, hashlib
@@ -21,8 +21,6 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'python_login'
 
-
-# Initialize MySQL
 mysql = MySQL(app)
 
 
@@ -30,15 +28,52 @@ mysql = MySQL(app)
 def admin():
     if 'loggedin' in session and session['role'] == 'admin':
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    # Retrieve all items with their views and likes
-        cursor.execute("SELECT * FROM accounts")
-        accounts = cursor.fetchall()
-        cursor.close()
-        return render_template('admin/admin.html', username=session['username'],accounts=accounts)
+        cursor.execute('SELECT * FROM accounts WHERE id = %s', (session['id'],))
+        account = cursor.fetchone()
+        cursor.execute('SELECT id, username, email, image FROM accounts ORDER BY id DESC LIMIT 10')
+        clients = cursor.fetchall()
+        try:
+            # Retrieve all items with their views and likes
+            cursor.execute("SELECT * FROM accounts")
+            accounts = cursor.fetchall()
+
+            # Get the count of IDs
+            cursor.execute("SELECT COUNT(id) AS user_count FROM accounts")
+            counts = cursor.fetchone()
+            users = counts['user_count'] if counts else 0
+            # Get the count of views
+            cursor.execute("SELECT COUNT(views) AS views_count FROM accounts")
+            counts = cursor.fetchone()
+            views = counts['views_count'] if counts else 0
+            # Get the count of likes
+             # Get the count of views
+            cursor.execute("SELECT COUNT(likes) AS likes_count FROM accounts")
+            counts = cursor.fetchone()
+            likes = counts['likes_count'] if counts else 0
+
+        except MySQLdb.Error as e:
+            # Log or handle the error
+            print(f"Database error: {e}")
+            users = 0
+            accounts = []
+
+        finally:
+            cursor.close()
+        for client in clients:
+              client['image_path'] = client['image'].replace('static/', '').replace('\\', '/')
+        return render_template('admin/admin.html', username=session['username'], accounts=accounts, users=users,views=views,likes=likes,account=account,clients=clients)
     else:
         flash('Access denied: Admins only!', 'danger')
         return redirect(url_for('login'))
-#Items
+
+@app.route('/pythonlogin/live_users')
+def live_users():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT username, email, image FROM accounts ORDER BY id DESC LIMIT 10')
+    clients = cursor.fetchall()
+    cursor.close()
+    return jsonify(clients)
+
 @app.route('/pythonlogin/', methods=['GET', 'POST'])
 def login():
     msg = ''
@@ -131,22 +166,17 @@ def home(item_id):
 
 
 
-@app.route('/pythonlogin/profile/<int:user_id>')
+@app.route('/pythonlogin/profile/<int:user_id>', methods=['GET', 'POST'])
 def profile(user_id):
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM accounts WHERE id = %s', (session['id'],))
         account = cursor.fetchone()
         msg = ''
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
         # Increment view count whenever a profile is accessed
         cursor.execute("UPDATE accounts SET views = views + 1 WHERE id = %s", (user_id,))
         mysql.connection.commit()
-
-        # Retrieve user details
-        cursor.execute("SELECT * FROM accounts WHERE id = %s", (user_id,))
-        user = cursor.fetchone()
 
         if request.method == 'POST' and 'like' in request.form:
             # Increment like count when the "like" button is clicked
@@ -157,7 +187,7 @@ def profile(user_id):
         cursor.close()
 
         image_path = account['image'].replace('static/', '').replace('\\', '/')
-        return render_template('profile.html', account=account,image_path=image_path,msg=msg,user=user)
+        return render_template('profile.html', account=account,image_path=image_path,msg=msg)
     return redirect(url_for('login'))
 
 

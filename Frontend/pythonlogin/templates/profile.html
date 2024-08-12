@@ -7,35 +7,41 @@
 <div>
     <p>Your account details are below:</p>
     <table>
-    <tr>
-        <img src="{{ url_for('static', filename=image_path) }}" alt="User Image"id="foto-profil">
-    </tr>
-    <tr>
-        <td id="nama">Username:</td>
-        <td>{{ account['username'] }}</td>
-    </tr>
-    <tr>
-        <td>Password:</td>
-        <td>******</td>
-    </tr>
-    <tr>
-        <td id="email">Email:</td>
-        <td>{{ account['email'] }}</td>
-    </tr>
-</table>
-     <div class="bayar">
-            <h2 id="payment">Alat Pembayaran : </h2>
-            <img src="{{ url_for('static', filename='image/dana.png') }}"  alt="dana.png" id="dana">
-            <img src="{{ url_for('static', filename='image/gopay.png') }}"  alt="gopay.png" id="gopay">
-        </div>
+        <tr>
+            <td colspan="2">
+                <img src="{{ url_for('static', filename=account['image']) }}" alt="User Image" id="foto-profil">
+            </td>
+        </tr>
+        <tr>
+            <td id="nama">Username:</td>
+            <td>{{ account['username'] }}</td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td>******</td>
+        </tr>
+        <tr>
+            <td id="email">Email:</td>
+            <td>{{ account['email'] }}</td>
+        </tr>
+    </table>
+    <div class="bayar">
+        <h2 id="payment">Alat Pembayaran:</h2>
+        <img src="{{ url_for('static', filename='image/dana.png') }}" alt="dana.png" id="dana">
+        <img src="{{ url_for('static', filename='image/gopay.png') }}" alt="gopay.png" id="gopay">
+    </div>
 </div>
-<h1>{{ user.username }}'s Profile</h1>
-        <p>Email: {{ user.email }}</p>
-        <p>Views: {{ user.views }}</p>
-        <p>Likes: {{ user.likes }}</p>
-        <form method="post">
-            <button type="submit" name="like">Like</button>
-        </form>
-        <p>{{ msg }}</p>
+
+{% if account %}
+    <h1>{{ account['username'] }}'s Profile</h1>
+    <p>Views: {{ account['views'] }}</p>
+    <p>Likes: {{ account['likes'] }}</p>
+    <form action="{{ url_for('profile', user_id=account['id']) }}" method="post">
+        <button type="submit" name="like">Like</button>
+    </form>
+    <p>{{ msg }}</p>
+{% else %}
+    <p>Profile not found.</p>
+{% endif %}
 {% endblock %}
 
