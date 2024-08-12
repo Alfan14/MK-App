@@ -155,7 +155,7 @@ def register():
     return render_template('register.html', msg = msg)
 
 @app.route('/pythonlogin/home')
-def home(item_id):
+def home():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM accounts WHERE id = %s', (session['id'],))
