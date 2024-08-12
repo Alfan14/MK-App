@@ -21,20 +21,17 @@
 			<h1 class="subheadline">Login sek yo</h1>
 			
 			<form action="{{ url_for('login') }}" method="post">
-				<label for="username">
-					<i class="fas fa-user"></i>
-				</label>
-				<input type="text" name="username" placeholder="Username" id="username" required>
-				<label for="password">
-					<i class="fas fa-lock"></i>
-				</label>
-				<input type="password" name="password" placeholder="Password" id="password" required>
+				<label for="uname">Email or Username</label>
+				<input type="text" name="username" placeholder="Username" id="username" required class="box">
+				<label for="psw" class="psw">Password</label>
+				<input type="password" name="password" placeholder="Password" id="password" required class="box">
 				<div class="msg">{{ msg }}</div>
-				<input type="submit" value="Login">
+				<button type="submit" class="button"><h4>Login</h4></button>
 			</form>
 			
 			<!-- sign in -->
         <h3 class="sign">Belum punya akun? <a href="{{ url_for('register') }}">Register</a></h3>
+		<a href="https://github.com/Alfan14/MK-App" class="git">github.com/MK-App</a>
 		</div>
 	</body>
 </html>
