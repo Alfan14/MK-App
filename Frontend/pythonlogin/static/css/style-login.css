@@ -34,7 +34,10 @@ body {
 }
 
 .main {
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
     margin: 1em 4em;
     padding: 1em;
 }
@@ -121,12 +124,17 @@ label {
     color: #000000;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
     .main {
-        font-size: 12pt;
+        margin: 10em 5em;
+        font-size: 20pt;
     }
 
     .sate {
         display: none;
+    }
+
+    .headline {
+        align-items: center;
     }
   }
