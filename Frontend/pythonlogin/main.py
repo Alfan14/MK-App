@@ -60,8 +60,8 @@ def admin():
         finally:
             cursor.close()
         for client in clients:
-              client['image_path'] = client['image'].replace('static/', '').replace('\\', '/')
-        return render_template('admin/admin.html', username=session['username'], accounts=accounts, users=users,views=views,likes=likes,account=account,clients=clients)
+               url_for('static', filename=client['image'].replace('static/', '').replace('\\', '/'))
+        return render_template('admin/admin.html', username=session['username'],accounts=accounts, users=users,views=views,likes=likes,account=account,clients=clients)
     else:
         flash('Access denied: Admins only!', 'danger')
         return redirect(url_for('login'))
