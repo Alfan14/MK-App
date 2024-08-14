@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"> 
 </head>
 <body>
-    <h2>Home Page</h2>
+    
+    <!-- header -->
     <header>
-        <div class="logo">Kuliner Magetan</div>
+        <img src="{{ url_for('static', filename='image/logo-dark.png') }}" alt="kuliner-magetan" class="logo">
         <div class="search-bar">
             <input type="text" placeholder="Cari Makanan atau Minuman..."  id="searchInput">
         </div>
@@ -20,30 +22,37 @@
             <button id="logoutButton"><a class="linkButton" href="{{ url_for('logout') }}">Log Out</a></button>
         </div>
     </header>
+
+    <!-- sidebar -->
     <div id="sidebar" class="sidebar">
         <h2>Sidebar</h2>
         <ul>
-           <li><a href="{{ url_for('profile', user_id=account.id) }}"><i class="fas fa-user-circle"></i>Profile</a></li>
+            <li><a href="{{ url_for('profile', user_id=account.id) }}"><i class="fas fa-user-circle"></i>Profile</a></li>
             <li><a href="{{ url_for('edit_profile', user_id=account.id) }}"><i class="fas fa-edit"></i>Edit Profile</a></li>
-
-
             <li><a href="#">Link 4</a></li>
         </ul>
     </div>
+
+    <!-- main -->
     <main>
         <h1 class="main-title">Rekomendasi minggu ini</h1>
-        <p class="subtitle">Lagi viral banget!</p>
-    <div class="cards" id="cardContainer"></div>
-    <div id="modal" class="modal">
-    <div class="modal-content">
-        <span class="modal-close">&times;</span>
-        <div id="modalDetails"></div>
-    </div>
-</div>
-    <div class="pagination">
-        <button id="prevPageButton">Previous Page</button>
-        <button id="nextPageButton">Next Page</button>
-    </div>
+        <h2>Lagi viral banget!</h2>
+        <p class="subtitle"></p>
+        <div class="cards" id="cardContainer"></div>
+        
+        <!-- pop up -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close">&times;</span>
+                <div id="modalDetails"></div>
+            </div>
+        </div>
+
+        <!-- prev next -->
+        <div class="pagination">
+            <button id="prevPageButton">Previous Page</button>
+            <button id="nextPageButton">Next Page</button>
+        </div>
     </main>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>

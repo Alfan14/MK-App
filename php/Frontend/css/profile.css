@@ -5,11 +5,10 @@
 }
 
 body {
-    background-color: #fff;
+    background-color: #1b1b1b;
     display: flex;
-    flex-wrap: wrap;
     font-family: "Poppins", Arial, Helvetica, sans-serif;
-    
+    overflow: hidden;
 }
 
 .sidebar {
@@ -31,92 +30,80 @@ a {
 }
 
 #info {
-    margin: 1.5em auto;
+    margin: 1em auto;
     font-size: 30pt;
 }
 
 #profil {
-    margin: 1.5em auto;
-    font-size: 15pt;
+    margin: 1.5em auto
 }
 
 #edit {
     margin: 1.5em auto;
-    font-size: 15pt;
 }
 
 #hapus {
     margin: 1.5em auto;
-    font-size: 15pt;
 }
 
 .main {
-    margin: 4em 4em 4em 26em;
-    overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    gap: 4em;
-    align-content: center;
+    margin: 4em 0 0 30vh;
     color: #ffffff;
 }
 
-.bio {  
+.bio {
     display: flex;
-    flex-shrink: 1;
-    align-items: flex-start;
+    margin: auto 10em;
 }
 
 #foto-profil {
     width: 200px;
     height: 200px;
     border-radius: 100%;
-    margin: 0 auto;
+    margin: 1em auto;
 }
 
 .name {
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 2em;
+    margin: 1em 1em 0 0;
 }
 
 #nama {
+    margin: 0 0.75em;
     font-size: 25pt;
 }
 
 #telp {
     font-weight: 300;
+    margin: 1em;
 }
 
 #email {
     font-weight: 300;
+    margin: 1em 1em 0 1em;
 }
 
 .location {
-    margin: 0 4em;
+    margin: 1em 10em 1em 15em;
     display: flex;
-    align-items: center;
+    align-content: center;
 }
 
 #gmaps {
     width: 100px;
     height: 100px;
     border-radius: 100%;
-    margin: 1em;
+    margin: 20px auto;
 }
 
 #alamat {
+    margin: 20px 50px;
     font-weight: 300;
 }
 
 .bayar {
     display: flex;
     align-items: center;
-    margin: 0 auto;
-}
-
-#payment {
-    font-weight: 300;
+    margin: 1em 0 0 15em;
 }
 
 #dana {
@@ -133,4 +120,15 @@ a {
 
 #edit-page {
     margin-top: 100vh;
+}
+
+/* laptop */
+@media (max-width: 600px) {
+    html {
+        font-size: 55%;
+    }
+
+    sidebar {
+        margin: 100vh 50vh;
+    }
 }

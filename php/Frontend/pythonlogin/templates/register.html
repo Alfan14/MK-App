@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Register</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='./css/style.css') }}">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+	</head>
+	<body>
+		<div class="register">
+			<h1>Register</h1>
+			<form action="{{ url_for('register') }}" method="post" autocomplete="off" enctype="multipart/form-data">
+				<label for="username">
+					<i class="fas fa-user"></i>
+				</label>
+				<input type="text" name="username" placeholder="Username" id="username" required></br>
+				<label for="file-input">Select an image:
+				</label>
+				<input type="file" id="image" name ="image"accept="image/*"></br>
+				<label for="password">
+					<i class="fas fa-lock"></i>
+				</label>
+				<input type="password" name="password" placeholder="Password" id="password" required></br>
+				<label for="email">
+					<i class="fas fa-envelope"></i>
+				</label>
+				<input type="email" name="email" placeholder="Email" id="email" required></br>
+				<label for="role">Role:</label>
+				<select id="role" name="role">
+					<option value="user">User</option>
+					<option value="admin">Admin</option> 
+				</select>
+				<div class="msg">{{ msg }}</div>
+				<input type="submit" value="Register">
+			</form>
+			<a href="{{ url_for('login') }}">Login</a>
+		</div>
+	</body>
+	<script>
+		const input = document.getElementById('file-input');
+		const preview = documnet.getElementById('preview');
+
+		input.addEventListener('change', () => {
+			const reader = new FileReader();
+			reader.onload = () => {
+				preview.src = reader.result;
+			};
+			reader.readAsDataURL(input.files[0]);
+		});
+	</script>
+</html>

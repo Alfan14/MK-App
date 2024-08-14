@@ -1,21 +1,22 @@
 body {
-    margin: 0 auto;
-    font-family: 'Poppins', Arial, sans-serif;
-    background-color: #1b1b1b;
+    margin: 0;
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #1a1a1a;
     color: #d3b18b;
 }
 
 header {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #1b1b1b;
+    background-color: #333;
 }
 
 .logo {
-    width: 200px;
-    height: auto;
+    font-size: 24px;
+    font-weight: bold;
+    color: #d3b18b;
 }
 
 .search-bar {
@@ -70,7 +71,6 @@ header {
 .menu button#logoutButton:hover {
     background-color: rgba(0, 0, 0, 0.2);
 }
-
 .linkButton{
     display: block;
     text-decoration: none;
@@ -118,7 +118,7 @@ header {
 main {
     padding: 20px;
     margin-top: 20px;
-    background-color: #1b1b1b;
+    background-color: #333;
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -131,25 +131,14 @@ main {
 }
 
 h1 {
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #d3b18b;
-}
-
-h2 {
-    margin: 0 auto 50px auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 300;
+    font-size: 36px;
+    margin-bottom: 10px;
 }
 
 .cards {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 20px;
     justify-content: center;
     padding: 0 20px;
 }
@@ -319,79 +308,24 @@ a:active {
 }
 
 @media screen and (max-width: 768px) {
-    .body {
-        margin: 10px;
-    }
-    
-    .main-title {
-        font-size: 20pt;
-    }
-
-    .menu {
-        display: flex;
-        gap: 0;
-        margin-left: 1em;
-    }
-
-    .header {
-        display: flex;
-        justify-content: space-evenly;
-    }
-    
-    .logo {
-        display: none;
+    header {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .search-bar {
         width: 100%;
+        justify-content: flex-start;
         padding: 10px 0;
     }
 
     .cards {
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         padding: 0;
     }
 
     .card {
         width: 90%;
-    }
-}
-
-@media screen and (max-width: 400px) {
-    .main-title {
-        font-size: 15pt;
-    }
-
-    .menu {
-        display: flex;
-        gap: 0;
-        margin-left: 1em;
-    }
-
-    .header {
-        display: flex;
-        justify-content: space-evenly;
-    }
-    
-    .logo {
-        display: none;
-    }
-
-    .search-bar {
-        width: 100%;
-        padding: 10px 0;
-    }
-
-    .cards {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .card {
-        width: 80%;
     }
 }
