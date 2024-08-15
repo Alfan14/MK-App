@@ -7,7 +7,7 @@
 <!-- main window -->
 <div class="main">
     <div class="bio">
-        <img src="{{ url_for('static', filename=account['image']) }}" alt="pp.jpg" id="foto-profil">
+        <img src="{{ url_for('static', filename=image_path) }}" alt="pp.jpg" id="foto-profil">
         <div class="name">
             <h2 id="nama">{{ account['username'] }}</h2>
             <h2 id="telp">+62891-2345-6789</h2>
@@ -23,5 +23,19 @@
         <img src="{{ url_for('static', filename='image/dana.png') }}" alt="dana.png" id="dana">
         <img src="{{ url_for('static', filename='image/gopay.png') }}" alt="gopay.png" id="gopay">
     </div>
+</div>
+
+<div class="like">
+{% if account %}
+    <h1>{{ account['username'] }}'s Profile</h1>
+    <p>Views: {{ account['views'] }}</p>
+    <p>Likes: {{ account['likes'] }}</p>
+    <form action="{{ url_for('profile', user_id=account['id']) }}" method="post">
+        <button type="submit" name="like">Like</button>
+    </form>
+    <p>{{ msg }}</p>
+    {% else %}
+    <p>Profile not found.</p>
+    {% endif %}
 </div>
 {% endblock %}
