@@ -3,17 +3,18 @@
 	<head>
 		<meta charset="utf-8">
 		<title>{% block title %}{% endblock %}</title>
-		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 		<link rel="stylesheet" href="{{ url_for('static', filename='/css/profile.css') }}">
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+    	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    	<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 	</head>
-	<body class="loggedin">
-		<nav class="navtop">
-			<div>
-				<h1>Website Title</h1>
-                <a href="{{ url_for('home') }}"><i class="fas fa-home"></i>Home</a>
-				<a href="{{ url_for('profile',user_id=account.id) }}"><i class="fas fa-user-circle"></i>Profile</a>
-				<a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Logout</a>
+	<body>
+		<nav class="sidebar">
+			<div id="wtf">
+				<h1 id="info">INFORMASI AKUN</h1>
+				<h2 id="profil"><a href="{{ url_for('profile',user_id=account.id) }}">Profile</a></h2>
+                <h2 id="beranda"><a href="{{ url_for('home') }}">Beranda</a></h2>
+				<h2 id="keluar"><a href="{{ url_for('logout') }}" onclick="alert('Ingin Keluar?')">Log out</a></h2>
 			</div>
 		</nav>
 		<div class="content">

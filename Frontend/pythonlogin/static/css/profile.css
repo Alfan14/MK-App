@@ -5,18 +5,17 @@
 }
 
 body {
-    background-color: #fff;
+    background-color: #1b1b1b;
     display: flex;
     flex-wrap: wrap;
     font-family: "Poppins", Arial, Helvetica, sans-serif;
-    
 }
 
 .sidebar {
     display: inline;
     height: 100vh;
-    width: 50vh;
-    position: fixed;
+    width: 30%;
+    position: fixed;    
     background-color: #d6b086;
 }
 
@@ -27,7 +26,7 @@ a {
 }
 
 #wtf {
-    margin: 4em 2.5em;
+    margin: 0 2.5em ;
 }
 
 #info {
@@ -40,17 +39,17 @@ a {
     font-size: 15pt;
 }
 
-#edit {
+#beranda {
     margin: 1.5em auto;
     font-size: 15pt;
 }
 
-#hapus {
+#keluar {
     margin: 1.5em auto;
     font-size: 15pt;
 }
 
-.main {
+.main, .like {
     margin: 4em 4em 4em 26em;
     overflow-x: hidden;
     display: flex;
