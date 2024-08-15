@@ -3,6 +3,29 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
+<h2>Profile Page</h2>
+<div>
+    <p>Your account details are below:</p>
+    <table>
+        <tr>
+            <td colspan="2">
+                <img src="{{ url_for('static', filename=image_path) }}" alt="User Image" id="foto-profil">
+            </td>
+        </tr>
+
+        <tr>
+            <td id="nama">Username:</td>
+            <td>{{ account['username'] }}</td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td>******</td>
+        </tr>
+        <tr>
+            <td id="email">Email:</td>
+            <td>{{ account['email'] }}</td>
+        </tr>
+    </table>
 
 <!-- main window -->
 <div class="main">
