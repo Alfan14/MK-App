@@ -1,0 +1,83 @@
+:root {
+    --primary: #d6b086;
+    --secondary: #01356f;
+    --bg: #1b1b1b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* form */
+
+.register {
+    margin: 2em auto;
+    padding: 2em;
+    border-radius: 1em;
+    background-color: var(--primary);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.register h1 {
+    margin-bottom: 1em;
+}
+
+.register form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.register a {
+    margin: 0 auto;
+    padding: 1em 8.6em;
+    background-color: var(--secondary);
+    text-decoration: none;
+    color: #ffffff;
+    border: 1px;
+    border-radius: 5px;
+    font-size: 10pt;
+}
+
+.register a:hover {
+    background-color: #02467f;
+}
+
+#username, #password, #email, #role {
+    width: 100%;
+    margin: 0.2em 0 1em 0;
+    padding: 0.2em 1em;
+    border: 2px solid black;
+    border-radius: 0.5em;
+}
+
+#image {
+    margin: 0.5em 0;
+}
+
+.button {
+    margin: 1em auto;
+    padding: 1em 8em;
+    background-color: green;
+    color: #ffffff;
+    border: 1px;
+    border-radius: 5px;
+}
+
+.button:hover {
+    background-color: #009000;
+}
