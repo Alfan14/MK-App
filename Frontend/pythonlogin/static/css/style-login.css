@@ -12,9 +12,10 @@ body {
 }
 
 .sate {
-    position: relative;
     width: 130%;
     height: auto;
+    object-fit: cover;
+    aspect-ratio: 1/2;
 }
 
 .main {
@@ -55,8 +56,6 @@ label {
     display: inline-block;
     border: 3px solid black;
     border-radius: 0.5em;
-    box-sizing: border-box;
-    font-family: "Poppins";
     font-size: 15pt;
 }
 
@@ -74,8 +73,6 @@ label {
     color: #ffffff;
     border: 3px solid black;
     border-radius: 0.3em;
-    box-sizing: border-box;
-    font-family: "Poppins";
     font-size: 15pt;
 }
 
@@ -107,17 +104,24 @@ label {
     color: #000000;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 1024px) {
     .main {
-        margin: 10em 5em;
-        font-size: 20pt;
+        margin: 100vh 5vh;
+        align-items: flex-start;    
     }
 
     .sate {
         display: none;
+    }    
+}
+
+@media (max-width: 480px) {
+    .main {
+        margin: 100vh 5vh;
+        align-items: flex-start;    
     }
 
-    .headline {
-        align-items: center;
+    .sate {
+        display: none;
     }
   }
