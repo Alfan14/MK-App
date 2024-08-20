@@ -7,6 +7,5 @@
   ],
   "routes": [
     { "src": "/(.*)", "dest": "app.py" }
-  ],
-  "postinstall": "apt-get update && apt-get install -y libmysqlclient-dev"
+  ]
 }
