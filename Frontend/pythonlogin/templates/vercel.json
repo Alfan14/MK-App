@@ -5,5 +5,11 @@
     ],
     "routes": [
         {"src": "/(.*)", "dest": "main.py"}
-    ]
+    ],
+    "ignoreFiles": [
+    "Admin",
+    "Backend",
+    "php",
+    "UI"
+  ]
 }
