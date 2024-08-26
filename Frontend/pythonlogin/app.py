@@ -1,28 +1,37 @@
-from flask import Flask, render_template, request, redirect, url_for, session ,  flash ,jsonify
+from flask import Flask, render_template, request, redirect, url_for, session ,  flash ,jsonify,send_from_directory
 from flask_mysqldb import MySQL
-from wtforms import StringField, PasswordField, SubmitField, DateField, SelectField , HiddenField
+from .static_routes import static_routes  
 import MySQLdb.cursors, re, hashlib
 from flask_login import  LoginManager,UserMixin,login_required,current_user,login_manager
 from urllib.parse import urlparse, urljoin
-from wtforms.validators import DataRequired, Email
-from flask_wtf import FlaskForm
+from dotenv import load_dotenv
 import os
 import re
 
+load_dotenv(os.path.join(os.path.dirname(__file__), '../../.env'))
+
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'static/uploads'
+
+app.register_blueprint(static_routes)
+
+app.config['UPLOAD_FOLDER'] =os.getenv ('UPLOAD_FOLDER')
 
 # Change this to your secret key (it can be anything, it's for extra protection)
-app.secret_key = 'septiyan_h4rd_l1f3'
+app.secret_key =os.getenv( 'SECRET_KEY')
 
-# Enter your database connection details below
-app.config['MYSQL_HOST'] = '127.0.0.1'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'python_login'
+app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')
+app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
+app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
+app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
 
 mysql = MySQL(app)
+@app.route('/')
+def index():
+    return "Hello, World!"
 
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    return send_from_directory('static', filename)
 
 @app.route('/pythonlogin/admin', methods=['GET', 'POST'])
 def admin():
