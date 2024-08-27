@@ -18,18 +18,18 @@
             <input type="text" placeholder="Cari Makanan atau Minuman..."  id="searchInput">
         </div>
         <div class="menu">
-            <button id="menuButton">Menu</button>
             <button id="logoutButton"><a class="linkButton" href="{{ url_for('logout') }}">Log Out</a></button>
+            <button id="menuButton">Menu</button>
         </div>
     </header>
 
     <!-- sidebar -->
     <div id="sidebar" class="sidebar">
-        <h2>Sidebar</h2>
         <ul>
-            <li><a href="{{ url_for('profile', user_id=account.id) }}"><i class="fas fa-user-circle"></i>Profile</a></li>
-            <li><a href="{{ url_for('edit_profile', user_id=account.id) }}"><i class="fas fa-edit"></i>Edit Profile</a></li>
-            <li><a href="#">Link 4</a></li>
+            <h2>MENU</h2>
+            <li><a href="{{ url_for('profile', user_id=account.id) }}">INFORMASI AKUN</a></li>
+            <li><a href="{{ url_for('edit_profile', user_id=account.id) }}">UBAH PROFIL</a></li>
+            <li><a href="#">TENTANG KULINER MAGETAN</a></li>
         </ul>
     </div>
 

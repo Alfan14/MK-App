@@ -67,13 +67,21 @@ label {
 }
 
 .button {
-    padding: 0.1em 0.5em;
-    margin: 0.5em 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.5em auto;
+    padding: 0.1em 8.5em;
     background-color: #6e2d1f;
     color: #ffffff;
     border: 3px solid black;
     border-radius: 0.3em;
     font-size: 15pt;
+    font-family: "Poppins";
+}
+
+.button:hover {
+    background-color: #8e4d3f;
 }
 
 .ingat {
