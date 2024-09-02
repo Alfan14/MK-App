@@ -5,47 +5,53 @@
 }
 
 body {
+    margin: 1em;
+    padding: 1em;
     background-color: #1b1b1b;
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 15pt;
     font-family: "Poppins", Arial, Helvetica, sans-serif;
     
 }
 
-.sidebar {
-    display: inline;
-    height: 100vh;
-    width: 50vh;
-    position: fixed;    
-    background-color: #d6b086;
-}
-
-a {
-    text-transform: uppercase;
-    text-decoration: none;
-    color: #1b1b1b;
-}
-
-#wtf {
-    margin: 0 2.5em ;
+form {
+    margin: 0 auto;
+    padding: 1em 1em;
+    border-radius: 1em;
+    background-color: #d6b886;
 }
 
 #info {
-    margin: 1.5em auto;
-    font-size: 30pt;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    color: #1b1b1b;
 }
 
-#profil {
-    margin: 1.5em auto;
-    font-size: 15pt;
+#username, #email {
+    width: 100%;
+    padding: 0.2em 1em;
+    margin: 0.5em 0;
+    display: inline-block;
+    border: 1.5px solid black;
+    border-radius: 0.5em;
 }
 
-#beranda {
-    margin: 1.5em auto;
-    font-size: 15pt;
-}
-
-#keluar {
-    margin: 1.5em auto;
-    font-size: 15pt;
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.5em auto;
+    padding: 0.5em 8.5em;
+    background-color: #6e2d1f;
+    color: #ffffff;
+    border: 1.5px solid black;
+    border-radius: 0.5em;
+    font-weight: 700;
+    font-family: "Poppins";
 }

@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session ,  flash ,jsonify,send_from_directory
 from flask_mysqldb import MySQL
-from .static_routes import static_routes  
 import MySQLdb.cursors, re, hashlib
 from flask_login import  LoginManager,UserMixin,login_required,current_user,login_manager
 from urllib.parse import urlparse, urljoin
@@ -11,8 +10,6 @@ import re
 load_dotenv(os.path.join(os.path.dirname(__file__), '../../.env'))
 
 app = Flask(__name__)
-
-app.register_blueprint(static_routes)
 
 app.config['UPLOAD_FOLDER'] =os.getenv ('UPLOAD_FOLDER')
 
