@@ -62,7 +62,16 @@ const modal = document.getElementById('modal');
 const modalDetails = document.getElementById('modalDetails');
 const modalClose = document.querySelector('.modal-close');
 
-function renderPage(page) {
+// Assuming account data is fetched from an API
+async function fetchAccountData() {
+    const response = await fetch('/pythonlogin/profile/<int:user_id>');  // Replace with your actual API endpoint
+    return await response.json();
+}
+
+// Render the restaurant data for the current page
+function renderPage(page, account) {
+    console.log('Account:', account); 
+
     const startIndex = page * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, currentRestaurants.length);
     const container = document.getElementById('cardContainer');
@@ -87,23 +96,34 @@ function renderPage(page) {
             <p>Telephone: ${restaurantPhone}</p>
             <p>Rating: ${restaurantRating}</p>
             <p><a href="${restaurantLink}" target="_blank"><i class="fas fa-map-marker-alt"></i> ${restaurantName}</a></p>
-        `;
-        // Add click event to open modal with specific details
-        card.addEventListener('click', () => {
-            modalDetails.innerHTML = `
-                <img src="${restaurantImage}" alt="${restaurantName}" style="width: 100%;" />
-                <h2>${restaurantName}</h2>
-                <p>Telephone: ${restaurantPhone}</p>
-                <p>Rating: ${restaurantRating}</p>
-                <button id="popup-route-button" class="route-button"><a href="${restaurantLink}" target="_blank"><i class="fas fa-map-marker-alt"></i> Cari rute terdekat</a></button>
-            `;
-            modal.style.display = 'block';
-        });
 
+            <!-- Dynamically inserting the likes section -->
+            <div class="like">
+                ${account ? `
+                    <p>Views: ${account.views}</p>
+                    <p>Likes: ${account.likes}</p>
+                    <form action="/profile/${account.id}" method="post">
+                        <button type="submit" name="like">Like</button>
+                    </form>
+                    <p>${msg}</p>
+                ` : `
+                    <p>Profile not found.</p>
+                `}
+            </div>
+        `;
         container.appendChild(card);
     }
 
     container.style.display = 'flex';
+
+
+// Fetch account data and render page
+fetchAccountData().then(account => {
+    fetchRestaurantData().then(() => {
+        renderPage(currentPage, account);
+    });
+});
+
 
     // Ensure modalClose is defined
     if (modalClose) {

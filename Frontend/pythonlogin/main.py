@@ -183,12 +183,10 @@ def profile(user_id):
         account = cursor.fetchone()
         msg = ''
 
-        # Increment view count whenever a profile is accessed
         cursor.execute("UPDATE accounts SET views = views + 1 WHERE id = %s", (user_id,))
         mysql.connection.commit()
 
         if request.method == 'POST' and 'like' in request.form:
-            # Increment like count when the "like" button is clicked
             cursor.execute("UPDATE accounts SET likes = likes + 1 WHERE id = %s", (user_id,))
             mysql.connection.commit()
             msg = 'Profile liked!'
