@@ -206,6 +206,7 @@ def edit_profile(user_id):
             username = request.form['username']
             email = request.form['email']
             image = request.files['image']
+            password = request.form['password']
 
             if not os.path.exists(app.config['UPLOAD_FOLDER']):
                 os.makedirs(app.config['UPLOAD_FOLDER'])
@@ -217,9 +218,9 @@ def edit_profile(user_id):
             cur = mysql.connection.cursor()
             cur.execute("""
                 UPDATE accounts
-                SET username = %s, email = %s,image = %s
+                SET username = %s, email = %s,image = %s,password = %s
                 WHERE id = %s
-            """, (username, email, file_path,user_id))
+            """, (username, email,password, file_path,user_id))
             mysql.connection.commit()
             cur.close()
             flash('Profile updated successfully!')
