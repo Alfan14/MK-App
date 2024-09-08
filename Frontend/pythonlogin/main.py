@@ -197,19 +197,27 @@ def profile(user_id):
         return render_template('profile.html', account=account,image_path=image_path,msg=msg)
     return redirect(url_for('login'))
 
-
 @app.route('/pythonlogin/edit-profile/<int:user_id>', methods=['GET', 'POST'])
 def edit_profile(user_id):
     if 'loggedin' in session and session['id'] == user_id:
         if request.method == 'POST':
             username = request.form['username']
             email = request.form['email']
+            image = request.files['image']
+
+            if not os.path.exists(app.config['UPLOAD_FOLDER']):
+                os.makedirs(app.config['UPLOAD_FOLDER'])
+            
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
+            print(f"Saving file to: {file_path}")
+            image.save(file_path)
+            
             cur = mysql.connection.cursor()
             cur.execute("""
                 UPDATE accounts
-                SET username = %s, email = %s
+                SET username = %s, email = %s,image = %s
                 WHERE id = %s
-            """, (username, email, user_id))
+            """, (username, email, file_path,user_id))
             mysql.connection.commit()
             cur.close()
             flash('Profile updated successfully!')
@@ -220,8 +228,6 @@ def edit_profile(user_id):
         account = cur.fetchone()
         cur.close()
         return render_template('edit.html', account=account)
-    return redirect(url_for('login'))
-
-#SearchEngine
+    return redirect(url_for('home'))
 if __name__ == '__main__':
     app.run(debug=True)

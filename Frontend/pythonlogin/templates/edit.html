@@ -11,8 +11,10 @@
 <body>
     
     {% if account %}
-    <form action="{{ url_for('edit_profile', user_id=account[0]) }}" method="post">
+    <form action="{{ url_for('edit_profile', user_id=account[0]) }}" method="post"enctype="multipart/form-data">
         <h1 id="info">Edit Profile</h1>
+        <label for="image">Profile Image:</label><br>
+        <input type="file" id="image" name ="image" required><br>
         <label for="username">Username:</label><br>
         <input type="text" id="username" name="username" value="{{ account[1] }}" required><br>
         <label for="email">Email:</label><br>
